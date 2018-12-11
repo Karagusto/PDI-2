@@ -1,0 +1,47 @@
+
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+Este é um arquivo de script temporário.
+"""
+
+import numpy as np
+import cv2
+from matplotlib import pyplot as plt
+
+img = cv2.imread('test2.jpg', 0)
+
+hist, bins = np.histogram(img.flatten(), 256, [0,256])
+
+contrast = hist.cumsum()
+contrast_norm = contrast*hist.max()/contrast.max()
+
+plt.plot(contrast_norm, color = 'b')
+plt.hist(img.flatten(), 256, [0, 256], color = 'r')
+plt.xlim([0,256])
+plt.ylim([0,5000])
+plt.legend(('contrast','histogram'), loc = 'upper left')
+plt.show()
+
+contrast_masked = np.ma.masked_equal(contrast,0)
+contrast_masked = (contrast_masked - contrast_masked.min())*255/(contrast_masked.max()-contrast_masked.min())
+contrast = np.ma.filled(contrast_masked,0).astype('uint8')
+img2 = contrast[img]
+
+hist,bins = np.histogram(img.flatten(),256,[0,256])
+    8 
+    9 cdf = hist.cumsum()
+   10 cdf_normalized = cdf * hist.max()/ cdf.max()
+   11 
+   12 plt.plot(cdf_normalized, color = 'b')
+   13 plt.hist(img2.flatten(),256,[0,256], color = 'r')
+   14 plt.xlim([0,256])
+   15 plt.legend(('cdf','histogram'), loc = 'upper left')
+   16 plt.show()
+plt.plot(contrast_norm, color = 'b')
+plt.hist(img2.flatten(), 256, [0, 256], color = 'r')
+plt.xlim([0,256])
+plt.ylim([0,3000])
+plt.legend(('contrast','histogram'), loc = 'upper left')
+plt.show()
